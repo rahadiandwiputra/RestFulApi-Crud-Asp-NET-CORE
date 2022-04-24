@@ -1,10 +1,8 @@
 ﻿namespace SamuraiApp.Api.DTO
 {
-    public class ElementDTO
+    public class ElementReadDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-
-        //SwordID ini sebagai foreign key untuk Samurai
-
     }
 }

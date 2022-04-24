@@ -8,6 +8,10 @@ namespace SamuraiApp.Api.DTO
         public string Name { get; set; }
         public DateTime Created { get; set; }
         public int Weight { get; set; }
-        public List<Element> Elements { get; set; } = new List<Element>();
+        public int SamuraiId
+        {
+            get; set;
+        }
+        public List<ElementReadDTO> Elements { get; set; } = new List<ElementReadDTO>();
     }
 }

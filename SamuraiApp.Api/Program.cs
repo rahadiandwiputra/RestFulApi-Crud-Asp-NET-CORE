@@ -31,6 +31,7 @@ x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 //injection
 builder.Services.AddScoped<ISamurai,SamuraiRepo>();
 builder.Services.AddScoped<ISword, SwordRepo>();
+builder.Services.AddScoped<IGeneralFunction, GeneralRepo>();
 
 
 //jwt Token

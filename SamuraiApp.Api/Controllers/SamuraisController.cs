@@ -9,18 +9,20 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SamuraiApp.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SamuraisController : ControllerBase
     {
         private readonly ISamurai _samurai;
         private readonly IMapper _mapper;
+        private readonly IGeneralFunction _generalFunction;
 
-        public SamuraisController(ISamurai samurais,IMapper mapper)
+        public SamuraisController(ISamurai samurais,IGeneralFunction generalFunction,IMapper mapper)
         {
             _samurai = samurais;
             _mapper = mapper;
+            _generalFunction = generalFunction;
         }
         // GET: api/<SamuraisController>
         [HttpGet]
@@ -51,17 +53,18 @@ namespace SamuraiApp.Api.Controllers
             return result2;
         }
         [HttpGet("GetSamuraiSwordElement/{id}")]
-        public async Task<Samurai> GetSamuraiSwordElement(int id)
+        public async Task<SamuraiReadSEDTO> GetSamuraiSwordElement(int id)
         {
-            var result = await _samurai.GetSamuraiSwordElement(id);
-            return result;
+            var result = await _generalFunction.GetSamuraiSwordElement(id);
+            var Dto = _mapper.Map<SamuraiReadSEDTO>(result);
+            return Dto;
         }
         [HttpGet("GetSamuraiWithSword/{id}")]
-        public async Task<Samurai> GetSamuraiWithSword(int id)
+        public async Task<SamuraiReadWithSword> GetSamuraiWithSword(int id)
         {
-            var result = await _samurai.GetSamuraiWithSword(id);
-           
-            return result;
+            var result = await _generalFunction.GetSamuraiWithSword(id);
+            var SAmuraiSWordDTO =_mapper.Map<SamuraiReadWithSword>(result);
+            return SAmuraiSWordDTO;
         }
 
         // POST api/<SamuraisController>
@@ -72,7 +75,8 @@ namespace SamuraiApp.Api.Controllers
             {
                 var result = await _samurai.Insert(samurai);
                 return CreatedAtAction("GetById", new { id = samurai.Id }, samurai);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }*/
@@ -129,13 +133,14 @@ namespace SamuraiApp.Api.Controllers
             }
         }
         [HttpPost("SamuraiSword")]
-        public async Task<ActionResult> PostWithElement(SamuraiCreateWithSwordDTO samuraiCreateWithSwordDTO)
+        public async Task<ActionResult> PostWithSword(SamuraiCreateWithSwordDTO samuraiCreateWithSwordDTO)
         {
             try
             {
                 var samuraiSword = _mapper.Map<Samurai>(samuraiCreateWithSwordDTO);
-                var result = await _samurai.InsertSamuraiWithSword(samuraiSword);
-                return Ok(result);
+                var result = await _generalFunction.InsertSamuraiWithSword(samuraiSword);
+                var DTO = _mapper.Map<SamuraiReadWithSword>(result);
+                return Ok(DTO);
             }
             catch (Exception ex)
             {

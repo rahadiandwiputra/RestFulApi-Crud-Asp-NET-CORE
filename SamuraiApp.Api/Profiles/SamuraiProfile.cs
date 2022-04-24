@@ -12,6 +12,10 @@ namespace SamuraiApp.Api.Profiles
             CreateMap<Samurai, SamuraiDTO>();
             CreateMap<SamuraiCreateDTO, Samurai>();
             CreateMap<SamuraiCreateWithSwordDTO, Samurai>();
+            CreateMap<Samurai, SamuraiReadWithSword>();
+            CreateMap<Samurai, SamuraiSwordElementReadDTO>();   
+            CreateMap<Samurai, SamuraiReadSEDTO>();
+
         }
     }
 }

@@ -16,9 +16,7 @@ namespace SamuraiApp.Data.Interface
         Task<T> Update(int id, T obj);
         Task DeleteById(int id);
 
-        Task<T> GetSamuraiWithSword(int id);
-        Task<T> GetSamuraiSwordElement(int id);
-        Task<T> InsertSamuraiWithSword(T obj);
+
 
 
     }

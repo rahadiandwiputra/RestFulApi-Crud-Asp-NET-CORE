@@ -45,23 +45,6 @@ namespace SamuraiApp.Data
             return result;
         }
 
-        public async Task<Samurai> GetSamuraiSwordElement(int id)
-        {
-            var result = await _context.Samurais.Where(s => s.Id == id)
-                .Include(j=>j.Swords)
-                .ThenInclude(i=>i.Elements)
-                .FirstOrDefaultAsync();
-            if (result == null) throw new Exception($"Data {id} Tidak Ditemukan");
-            return result;
-        }
-
-        public async Task<Samurai> GetSamuraiWithSword(int id)
-        {
-            var result = await _context.Samurais.Include(a => a.Swords)
-                .FirstOrDefaultAsync(s=>s.Id == id);
-            if (result == null) throw new Exception($"Data {id} Tidak Ditemukan");
-            return result;
-        }
 
         public async Task<Samurai> Insert(Samurai obj)
         {
@@ -87,29 +70,7 @@ namespace SamuraiApp.Data
             }
         }
 
-        public async Task<Samurai> InsertSamuraiWithSword(Samurai obj)
-        {
-            try
-            {
-                foreach (var sword in obj.Swords)
-                {
-                    sword.SamuraiId = obj.Id;
-                }
-                _context.Samurais.Add(obj);
-                _context.Swords.AddRange(obj.Swords);
-                await _context.SaveChangesAsync();
-                return obj;
-
-            }
-            catch (DbUpdateConcurrencyException edbx)
-            {
-                throw new Exception(edbx.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        
 
         //Tracking
         public async Task<Samurai> Update(int id, Samurai obj)

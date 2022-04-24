@@ -15,7 +15,8 @@ namespace SamuraiApp.Data
         {
 
         }*/
-        /*public SamuraiContext()
+        //Aktifkan method ini ketika ingin migration data
+       /* public SamuraiContext()
         {
 
         }*/
@@ -29,10 +30,11 @@ namespace SamuraiApp.Data
         public DbSet<SamuraiBattleStat> SamuraiBattleStats { get; set; }//secara default ini no tracking karena tidak punya key
         public DbSet<Sword> Swords { get; set; }
         public DbSet<Element> Elements { get; set; }
+        public DbSet<SwordElement> SwordElements { get; set; }
 
        /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SamuraiDB")//untuk menyambungkan ke database
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=NewSamuraiDB")//untuk menyambungkan ke database
                 .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name,//untuk menampilkan logging
                 DbLoggerCategory.Database.Transaction.Name},
                 Microsoft.Extensions.Logging.LogLevel.Information).EnableSensitiveDataLogging();
@@ -58,6 +60,11 @@ namespace SamuraiApp.Data
                 .HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Horse>().ToTable("Horses");
             modelBuilder.Entity<SamuraiBattleStat>().HasNoKey().ToView("SamuraiBattleStats");//secara default ini no tracking karena tidak punya key
+            modelBuilder.Entity<Sword>().HasMany(s => s.Elements)
+                .WithMany(b => b.Swords)
+                .UsingEntity<SwordElement>(
+                    bs => bs.HasOne<Element>().WithMany(),
+                    bs => bs.HasOne<Sword>().WithMany());
         }
     }
 }

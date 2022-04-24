@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamuraiApp.Data;
 
@@ -11,9 +12,10 @@ using SamuraiApp.Data;
 namespace SamuraiApp.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
-    partial class SamuraiContextModelSnapshot : ModelSnapshot
+    [Migration("20220424040631_manytomanyelement")]
+    partial class manytomanyelement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,9 +60,19 @@ namespace SamuraiApp.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<int?>("ElementsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SwordsId")
+                        .HasColumnType("int");
+
                     b.HasKey("BattleId", "SamuraiId");
 
+                    b.HasIndex("ElementsId");
+
                     b.HasIndex("SamuraiId");
+
+                    b.HasIndex("SwordsId");
 
                     b.ToTable("BattleSamurai");
                 });
@@ -188,21 +200,6 @@ namespace SamuraiApp.Data.Migrations
                     b.ToTable("Swords");
                 });
 
-            modelBuilder.Entity("SamuraiApp.Domain.SwordElement", b =>
-                {
-                    b.Property<int>("ElementId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SwordId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ElementId", "SwordId");
-
-                    b.HasIndex("SwordId");
-
-                    b.ToTable("SwordElement");
-                });
-
             modelBuilder.Entity("SamuraiApp.Domain.BattleSamurai", b =>
                 {
                     b.HasOne("SamuraiApp.Domain.Battle", null)
@@ -211,11 +208,19 @@ namespace SamuraiApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SamuraiApp.Domain.Element", null)
+                        .WithMany()
+                        .HasForeignKey("ElementsId");
+
                     b.HasOne("SamuraiApp.Domain.Samurai", null)
                         .WithMany()
                         .HasForeignKey("SamuraiId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("SamuraiApp.Domain.Sword", null)
+                        .WithMany()
+                        .HasForeignKey("SwordsId");
                 });
 
             modelBuilder.Entity("SamuraiApp.Domain.Horse", b =>
@@ -247,21 +252,6 @@ namespace SamuraiApp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Samurai");
-                });
-
-            modelBuilder.Entity("SamuraiApp.Domain.SwordElement", b =>
-                {
-                    b.HasOne("SamuraiApp.Domain.Element", null)
-                        .WithMany()
-                        .HasForeignKey("ElementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SamuraiApp.Domain.Sword", null)
-                        .WithMany()
-                        .HasForeignKey("SwordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("SamuraiApp.Domain.Samurai", b =>

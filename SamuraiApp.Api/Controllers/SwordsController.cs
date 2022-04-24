@@ -9,24 +9,26 @@ using SamuraiApp.Domain;
 
 namespace SamuraiApp.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SwordsController : ControllerBase
     {
         private readonly ISword _swords;
         private readonly IMapper _mapper;
+        private readonly IGeneralFunction _generalFunction;
 
-        public SwordsController(ISword sword, IMapper mapper)
+        public SwordsController(ISword sword, IGeneralFunction generalFunction, IMapper mapper)
         {
             _swords = sword;
             _mapper = mapper;
+            _generalFunction = generalFunction;
         }
         // GET: api/<SwordsController>
         [HttpGet]
         public async Task<IEnumerable<SwordDTO>> Get()
         {
-            var result = await _swords.GetAllSword();
+            var result = await _swords.GetAll();
             var output = _mapper.Map<IEnumerable<SwordDTO>>(result);
             return output;
         }
@@ -48,7 +50,7 @@ namespace SamuraiApp.Api.Controllers
             try
             {
                 var sword = _mapper.Map<Sword>(swordCreateDTO);
-                var result = await _swords.InsertSword(sword);
+                var result = await _swords.Insert(sword);
                 var swordDTO = _mapper.Map<SwordDTO>(result);
                 return CreatedAtAction("GetById", new { id = sword.Id }, swordDTO);
             }
@@ -64,7 +66,7 @@ namespace SamuraiApp.Api.Controllers
             try
             {
                 var sword = _mapper.Map<Sword>(swordCreateWithElement);
-                var result = await _swords.InsertSwordWithElement(sword);
+                var result = await _generalFunction.InsertSwordWithElement(sword);
                 var swordDTO = _mapper.Map<SwordDTO>(result);
                 return Ok(result);
             }

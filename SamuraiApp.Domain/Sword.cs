@@ -14,7 +14,7 @@ namespace SamuraiApp.Domain
         public int Weight { get; set; }
         public Samurai Samurai { get; set; }
         //SamuraiId ini sebagai foreign key untuk Samurai
-        public int? SamuraiId
+        public int SamuraiId
         {
             get; set;
         }

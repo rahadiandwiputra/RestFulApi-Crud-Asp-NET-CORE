@@ -10,11 +10,6 @@ namespace SamuraiApp.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Sword Sword { get; set; }
-        //SamuraiId ini sebagai foreign key untuk Samurai
-        public int? SwordId
-        {
-            get; set;
-        }
+        public List<Sword> Swords { get; set; } = new List<Sword>();
     }
 }

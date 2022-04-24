@@ -25,7 +25,7 @@ namespace SamuraiApp.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Sword>> GetAllSword()
+        public async Task<IEnumerable<Sword>> GetAll()
         {
             var swords = await _context.Swords.OrderBy(s => s.Name).AsNoTracking().ToListAsync();
             return swords;
@@ -38,7 +38,14 @@ namespace SamuraiApp.Data
             return result;
         }
 
-        public async Task<Sword> InsertSword(Sword obj)
+        public async Task<IEnumerable<Sword>> GetByName(string name)
+        {
+            var result = await _context.Swords.Where(s => s.Name.Contains(name)).ToListAsync();
+            if (result == null) throw new Exception($"Data dengan Nama : {name} Tidak ditemukan");
+            return result;
+        }
+
+        public async Task<Sword> Insert(Sword obj)
         {
             try
             {
@@ -56,28 +63,7 @@ namespace SamuraiApp.Data
             }
         }
 
-        public async Task<Sword> InsertSwordWithElement(Sword obj)
-        {
-            try
-            {
-                foreach(var element in obj.Elements)
-                {
-                    element.SwordId = obj.Id;
-                }
-                _context.Swords.Add(obj);
-                _context.Elements.AddRange(obj.Elements);
-                await _context.SaveChangesAsync();
-                return obj;
-            }
-            catch (DbUpdateConcurrencyException edbx)
-            {
-                throw new Exception(edbx.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        
 
         public async Task<Sword> Update(int id, Sword obj)
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SamuraiApp.Data.Interface
 {
-    public interface ISword : ICrud<Sword>
+    public interface IElement : ICrud<Element>
     {
     }
 }
